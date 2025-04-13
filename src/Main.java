@@ -1,44 +1,53 @@
-public class Main{
-    public static void main(String[] args){
-        SinglyLinkedList<Integer> list=new SinglyLinkedList<>();
-        list.addFirst(10);
-        list.addLast(20);
-        list.addLast(30);
-        list.addFirst(5);
-        System.out.println("List after adding elements:");
-        list.printAll();
+import java.util.Random;
 
-        System.out.println("Size: " + list.size());
+class MyTestingClass {
+    private int id;
 
-        list.removeLast();
-        System.out.println("List after removing last element:");
-        list.printAll();
+    public MyTestingClass(int id) {
+        this.id = id;
+    }
 
-        System.out.println("Size after removal: " + list.size());
+    @Override
+    public int hashCode() {
+        // Custom uniform hash
+        int hash = 7;
+        hash = 31 * hash + id;
+        return hash;
+    }
 
-        System.out.println("Search for 20: " + list.search(20));
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof MyTestingClass other) {
+            return this.id == other.id;
+        }
+        return false;
+    }
+}
 
-        list.insertAt(25, 1);
-        System.out.println("List after inserting 25 at index 1:");
-        list.printAll();
+class Student {
+    private String name;
 
-        list.removeByValue(10);
-        System.out.println("List after removing value 10:");
-        list.printAll();
+    public Student(String name) {
+        this.name = name;
+    }
 
-        SinglyLinkedList<Integer> otherList=new SinglyLinkedList<>();
-        otherList.addFirst(50);
-        otherList.addLast(60);
-        list.combine(otherList);
-        System.out.println("List after combining with another list:");
-        list.printAll();
+    public String toString() {
+        return name;
+    }
+}
 
-        list.reverse();
-        System.out.println("List after reversal:");
-        list.printAll();
+class MyHashTableTest {
+    public static void main(String[] args) {
+        MyHashTable<MyTestingClass, Student> table = new MyHashTable<>(31); // Larger prime for better distribution
+        Random rand = new Random();
 
-        list.sort();
-        System.out.println("List after sorting:");
-        list.printAll();
+        for (int i = 0; i < 10000; i++) {
+            int id = rand.nextInt(100000);
+            MyTestingClass key = new MyTestingClass(id);
+            Student student = new Student("Student" + id);
+            table.put(key, student);
+        }
+
+        table.printBucketSizes();
     }
 }
